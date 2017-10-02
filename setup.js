@@ -37,7 +37,7 @@ function createTable() {
   });
 }
 
-function alter() {
+function alterProfiles() {
   db.run('ALTER TABLE Profiles ADD contact_id INTEGER REFERENCES Contacts(id)', (err) => {
     if(err){
       console.log(err);
@@ -45,5 +45,21 @@ function alter() {
   })
 }
 
+function alterAddresses() {
+  db.run('ALTER TABLE Addresses ADD contact_id INTEGER REFERENCES Contacts(id)', (err) => {
+    if(err){
+      console.log(err);
+    }
+  })
+}
 
-// alter()
+function alterAddresses() {
+  db.run('ALTER TABLE Addresses ADD contact_id INTEGER REFERENCES Contacts(id)', (err) => {
+    if(err){
+      console.log(err);
+    }
+  })
+}
+
+
+alterAddresses()

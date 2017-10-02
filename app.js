@@ -19,7 +19,9 @@ app.get('/', (req, res) => {
 //Contacts----------------------
 app.get('/contacts', (req, res) => {
   db.all('SELECT * FROM Contacts', (err, rows) =>{
-    res.render('contacts', {contacts:rows, title:'Contacts'})
+    db.all('SELECT * FROM Groups', (err, rows2) =>{
+      res.render('contacts', {contacts:rows, groups:rows2, title:'Contacts'})
+    })
   })
 })
 app.post('/contacts', urlencodedParser, (req, res) => {
@@ -53,6 +55,25 @@ app.get('/contacts/delete/:id', urlencodedParser, (req, res) => {
   db.run(`DELETE FROM Contacts WHERE id='${req.params.id}'`)
   res.redirect('/contacts')
 })
+app.get('/contacts/address/:id', urlencodedParser, (req, res) => {
+  db.all(`SELECT Addresses.*, Contacts.name FROM Addresses JOIN Contacts ON Addresses.contact_id = Contacts.id WHERE contact_id = '${req.params.id}'`, (err, rows) =>{
+    console.log(rows);
+    res.render('addresses-with-contact', {addresses:rows, title:'Addresses'})
+  })
+})
+app.post('/contacts/address/:id', urlencodedParser, (req, res) => { // add address via addresses-with-contact
+  console.log(req.body);
+  console.log(req.params);
+  if (!req.body) return res.send('input data error')
+  if (!req.body.street || !req.body.city || !req.body.zipcode || !req.params.id){
+   renderAlertAddress(req, res, 'Silakan isi semua form dengan lengkap!!')
+  }else{
+   db.run(`INSERT INTO Addresses (street, city, zipcode, contact_id) VALUES ('${req.body.street}', '${req.body.city}', '${req.body.zipcode}', '${req.params.id}')`, (err) => {
+     if(!err) res.redirect(`/contacts/address/${req.params.id}`)
+   })
+  }
+})
+
 
 
 //Groups
@@ -92,10 +113,17 @@ app.get('/groups/delete/:id', urlencodedParser, (req, res) => {
   db.run(`DELETE FROM Groups WHERE id='${req.params.id}'`)
   res.redirect('/groups')
 })
+app.get('/groups/assign-contacts/:id', urlencodedParser, (req, res) => {
+  db.all(`SELECT * FROM Groups WHERE id = ${req.params.id}`, (err, rows) =>{
+    db.all('SELECT * FROM Contacts', (err, rows2) =>{
+      res.render('assign-contact', {groups:rows, contacts:rows2, title:'Groups'})
+    })
+  })
+})
 
 
 // Profiles
-function alert(req, res, errMsg){
+function renderAlertProfile(req, res, errMsg){
   db.all('SELECT Profiles.*,Contacts.name FROM Profiles JOIN Contacts ON Profiles.contact_id = Contacts.id', (err, rows) =>{
     db.all('SELECT * FROM Contacts', (err, rows2) =>{
       res.render('profiles', {profiles:rows, contacts:rows2, title:'Profiles', alert:errMsg})
@@ -104,18 +132,18 @@ function alert(req, res, errMsg){
 }
 
 app.get('/profiles', (req, res) => {
-  alert(req, res, '')
+  renderAlertProfile(req, res, '')
 })
 app.post('/profiles', urlencodedParser, (req, res) => {
   if (!req.body) return res.send('input data error')
   if (!req.body.username || !req.body.password || !req.body.contact_id){
-   alert(req, res, 'Silakan isi semua form dengan lengkap!!')
+   renderAlertProfile(req, res, 'Silakan isi semua form dengan lengkap!!')
   }else{
    db.run(`INSERT INTO Profiles (username, password, contact_id) VALUES ('${req.body.username}', '${req.body.password}', '${req.body.contact_id}')`, (err) => {
      if(!err){
        res.redirect('/profiles')
      }else{
-       alert(req, res, 'Contact ID tidak bisa dipakai!!')
+       renderAlertProfile(req, res, 'Contact ID tidak bisa dipakai!!')
      }
    })
   }
@@ -144,24 +172,31 @@ app.get('/profiles/delete/:id', urlencodedParser, (req, res) => {
 
 
 // Addresses
-app.get('/addresses', (req, res) => {
-  db.all('SELECT * FROM Addresses', (err, rows) =>{
-    res.render('addresses', {addresses:rows, title:'Addresses'})
+function renderAlertAddress(req, res, errMsg){
+  db.all('SELECT Addresses.*, Contacts.name FROM Addresses JOIN Contacts ON Addresses.contact_id = Contacts.id', (err, rows) =>{
+    db.all('SELECT * FROM Contacts', (err, rows2) =>{
+      res.render('addresses', {addresses:rows, contacts:rows2, title:'Addresses', alert:errMsg})
+    })
   })
+}
+app.get('/addresses', (req, res) => {
+  renderAlertAddress(req, res)
 })
 app.post('/addresses', urlencodedParser, (req, res) => {
   if (!req.body) return res.send('input data error')
-  if (!req.body.street || !req.body.city || !req.body.zipcode){
-   res.redirect('/addresses')
+  if (!req.body.street || !req.body.city || !req.body.zipcode || !req.body.contact_id){
+   renderAlertAddress(req, res, 'Silakan isi semua form dengan lengkap!!')
   }else{
-   db.run(`INSERT INTO Addresses (street, city, zipcode) VALUES ('${req.body.street}', '${req.body.city}', '${req.body.zipcode}')`, (err) => {
+   db.run(`INSERT INTO Addresses (street, city, zipcode, contact_id) VALUES ('${req.body.street}', '${req.body.city}', '${req.body.zipcode}', '${req.body.contact_id}')`, (err) => {
      if(!err) res.redirect('/addresses')
    })
   }
 })
 app.get('/addresses/edit/:id', (req, res) => {
   db.all(`SELECT * FROM Addresses WHERE id = '${req.params.id}'`, function(err, rows){
-    res.render('addresses-edit', {data: rows[0], title:'Addresses | Edit Data'})
+    db.all('SELECT * FROM Contacts', (err, rows2) =>{
+      res.render('addresses-edit', {data: rows[0], contacts: rows2, title:'Addresses | Edit Data'})
+    })
   })
 })
 app.post('/addresses/edit/:id', urlencodedParser, (req, res) => {
@@ -169,7 +204,8 @@ app.post('/addresses/edit/:id', urlencodedParser, (req, res) => {
   if (!req.body.street || !req.body.city || !req.body.zipcode){
     res.redirect(`/addresses/edit/${req.params.id}`)
   }else{
-    db.run(`UPDATE Addresses SET street='${req.body.street}', city='${req.body.city}', zipcode='${req.body.zipcode}' WHERE id='${req.params.id}'`, (err) => {
+    console.log(req.body);
+    db.run(`UPDATE Addresses SET street='${req.body.street}', city='${req.body.city}', zipcode='${req.body.zipcode}', contact_id='${req.body.contact_id}' WHERE id='${req.params.id}'`, (err) => {
       if(!err) res.redirect('/addresses')
     })
   }

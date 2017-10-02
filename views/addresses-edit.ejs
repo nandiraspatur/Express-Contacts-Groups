@@ -26,6 +26,15 @@
                 <input type="text" placeholder="Zipcode" name="zipcode" class="form__input" value="<%=data.zipcode%>"/>
             </div>
 
+            <div class="form__group">
+              <select name="contact_id" class="select">
+                <option value="">-select contact-</option>
+                <%for(var i=0; i<contacts.length; i++){%>
+                  <option value="<%=contacts[i].id%>"><%=contacts[i].name%></option>
+                <%}%>
+              </select>
+            </div>
+
             <button class="btn" type="submit">SUBMIT</button>
 
         </form>

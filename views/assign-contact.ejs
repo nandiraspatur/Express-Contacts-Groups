@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title><%=title%></title>
+  </head>
+  <body>
+    <div class="user" id="form">
+        <header class="user__header">
+            <img src="/img/add.svg" alt="" />
+            <h1 class="user__title">ASSIGN CONTACT TO <%=groups[0].name_of_group%></h1>
+        </header>
+
+        <form class="form" action="/groups" method="post">
+            <div class="form__group">
+              <select name="contact_id" class="select">
+                <option value="">-select contact-</option>
+                <%for(var i=0; i<contacts.length; i++){%>
+                  <option value="<%=contacts[i].id%>"><%=contacts[i].name%></option>
+                <%}%>
+              </select>
+            </div>
+
+            <button class="btn" type="submit">SUBMIT</button>
+        </form>
+        <a class="back" href="/groups">Back to Groups</a>
+    </div>
+  </body>
+</html>

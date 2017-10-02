@@ -10,7 +10,7 @@
     <table>
       <thead>
         <tr>
-          <th colspan="6"><h3>ADDRESSES</h3></th>
+          <th colspan="5"><h3>ADDRESSES</h3></th>
           <th>
             <a href="/"><i class="material-icons">home</i></a>
             <a href="#form"><i class="material-icons">add_box</i></a>
@@ -21,7 +21,6 @@
           <th>Street</th>
           <th>City</th>
           <th>Zipcode</th>
-          <th>Contact ID</th>
           <th>Name</th>
           <th></th>
         </tr>
@@ -29,7 +28,7 @@
       <tbody>
         <%if(addresses.length == 0){%>
           <tr>
-            <td colspan="7">Empty</td>
+            <td colspan="6">Empty</td>
           </tr>
         <%}else{%>
         <%for(var i=0; i<addresses.length; i++){%>
@@ -38,7 +37,6 @@
             <td><%=addresses[i].street%></td>
             <td><%=addresses[i].city%></td>
             <td><%=addresses[i].zipcode%></td>
-            <td><%=addresses[i].contact_id%></td>
             <td><%=addresses[i].name%></td>
             <td>
               <a href="/addresses/edit/<%=addresses[i].id%>"><i class="material-icons">mode_edit</i></a>
@@ -48,15 +46,16 @@
         <%}}%>
       </tbody>
     </table>
+
     <div class="user" id="form">
         <header class="user__header">
-            <img src="/img/add.svg" alt="" />
+            <img src="/img/add.svg" />
             <h1 class="user__title">ADD NEW ADDRESS</h1>
             <br>
-            <p style="color:red;"><%=alert%></p>
+
         </header>
 
-        <form class="form" action="/addresses" method="post">
+        <form class="form" action="/contacts/address/<%=addresses[0].contact_id%>" method="post">
             <div class="form__group">
                 <input type="text" placeholder="Street" name="street" class="form__input" />
             </div>
@@ -69,17 +68,9 @@
                 <input type="text" placeholder="Zipcode" name="zipcode" class="form__input" />
             </div>
 
-            <div class="form__group">
-              <select name="contact_id" class="select">
-                <option value="">-select contact-</option>
-                <%for(var i=0; i<contacts.length; i++){%>
-                  <option value="<%=contacts[i].id%>"><%=contacts[i].name%></option>
-                <%}%>
-              </select>
-            </div>
-
             <button class="btn" type="submit">SUBMIT</button>
         </form>
+        <a class="back" href="/contacts">Back to Contacts</a>
     </div>
   </body>
 </html>
