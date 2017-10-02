@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title><%=title%></title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="4"><h3>ADDRESSES</h3></th>
+          <th>
+            <a href="/"><i class="material-icons">home</i></a>
+            <a href="#form"><i class="material-icons">add_box</i></a>
+          </th>
+        </tr>
+        <tr>
+          <th>ID</th>
+          <th>Street</th>
+          <th>City</th>
+          <th>Zipcode</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%if(addresses.length == 0){%>
+          <tr>
+            <td colspan="5">Empty</td>
+          </tr>
+        <%}else{%>
+        <%for(var i=0; i<addresses.length; i++){%>
+          <tr>
+            <td><%=addresses[i].id%></td>
+            <td><%=addresses[i].street%></td>
+            <td><%=addresses[i].city%></td>
+            <td><%=addresses[i].zipcode%></td>
+            <td>
+              <a href="/addresses/edit/<%=addresses[i].id%>"><i class="material-icons">mode_edit</i></a>
+              <a href="/addresses/delete/<%=addresses[i].id%>"><i class="material-icons">delete_forever</i></a>
+          </td>
+          </tr>
+        <%}}%>
+      </tbody>
+    </table>
+    <div class="user" id="form">
+        <header class="user__header">
+            <img src="/img/add.svg" alt="" />
+            <h1 class="user__title">ADD NEW ADDRESS</h1>
+        </header>
+
+        <form class="form" action="/addresses" method="post">
+            <div class="form__group">
+                <input type="text" placeholder="Street" name="street" class="form__input" />
+            </div>
+
+            <div class="form__group">
+                <input type="text" placeholder="City" name="city" class="form__input" />
+            </div>
+
+            <div class="form__group">
+                <input type="text" placeholder="Zipcode" name="zipcode" class="form__input" />
+            </div>
+
+            <button class="btn" type="submit">SUBMIT</button>
+        </form>
+    </div>
+  </body>
+</html>

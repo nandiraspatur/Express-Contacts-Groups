@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title><%=title%></title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="5"><h3>PROFILES</h3></th>
+          <th>
+            <a href="/"><i class="material-icons">home</i></a>
+            <a href="#form"><i class="material-icons">add_box</i></a>
+          </th>
+        </tr>
+        <tr>
+          <th>ID</th>
+          <th>User Name</th>
+          <th>Password</th>
+          <th>Contact ID</th>
+          <th>Name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%if(profiles.length == 0){%>
+          <tr>
+            <td colspan="6">Empty</td>
+          </tr>
+        <%}else{%>
+        <%for(var i=0; i<profiles.length; i++){%>
+          <tr>
+            <td><%=profiles[i].id%></td>
+            <td><%=profiles[i].username%></td>
+            <td><%=profiles[i].password%></td>
+            <td><%=profiles[i].contact_id%></td>
+            <td><%=profiles[i].name%></td>
+            <td>
+              <a href="/profiles/edit/<%=profiles[i].id%>"><i class="material-icons">mode_edit</i></a>
+              <a href="/profiles/delete/<%=profiles[i].id%>"><i class="material-icons">delete_forever</i></a>
+          </td>
+          </tr>
+        <%}}%>
+      </tbody>
+    </table>
+    <div class="user" id="form">
+        <header class="user__header">
+            <img src="/img/add.svg" alt="" />
+            <h1 class="user__title">ADD NEW PROFILE</h1>
+            <br>
+            <p style="color:red;"><%=alert%></p>
+        </header>
+
+        <form class="form" action="/profiles" method="post">
+            <div class="form__group">
+                <input type="text" placeholder="User Name" name="username" class="form__input" />
+            </div>
+
+            <div class="form__group">
+                <input type="password" placeholder="Password" name="password" class="form__input" />
+            </div>
+
+            <div class="form__group">
+              <select name="contact_id" class="select">
+                <option value="" disabled selected>-select contact-</option>
+                <%for(var i=0; i<contacts.length; i++){%>
+                  <option value="<%=contacts[i].id%>"><%=contacts[i].name%></option>
+                <%}%>
+              </select>
+            </div>
+
+            <button class="btn" type="submit">SUBMIT</button>
+        </form>
+    </div>
+  </body>
+</html>

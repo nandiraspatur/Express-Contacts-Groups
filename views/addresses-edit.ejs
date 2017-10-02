@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title><%=title%></title>
+  </head>
+  <body>
+    <div class="user">
+        <header class="user__header">
+            <img src="/img/edit.svg" alt="" />
+            <h1 class="user__title">EDIT ADDRESSES</h1>
+        </header>
+
+        <form class="form" action="<%=data.id%>" method="post">
+            <div class="form__group">
+                <input type="text" placeholder="Street" name="street" class="form__input" value="<%=data.street%>"/>
+            </div>
+
+            <div class="form__group">
+                <input type="text" placeholder="City" name="city" class="form__input" value="<%=data.city%>"/>
+            </div>
+
+            <div class="form__group">
+                <input type="text" placeholder="Zipcode" name="zipcode" class="form__input" value="<%=data.zipcode%>"/>
+            </div>
+
+            <button class="btn" type="submit">SUBMIT</button>
+
+        </form>
+        <a class="back" href="/addresses">Back to Addresses</a>
+    </div>
+  </body>
+</html>
