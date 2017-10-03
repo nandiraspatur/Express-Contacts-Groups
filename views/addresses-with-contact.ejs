@@ -10,7 +10,7 @@
     <table>
       <thead>
         <tr>
-          <th colspan="5"><h3>ADDRESSES</h3></th>
+          <th colspan="6"><h3>ADDRESSES</h3></th>
           <th>
             <a href="/"><i class="material-icons">home</i></a>
             <a href="#form"><i class="material-icons">add_box</i></a>
@@ -21,6 +21,7 @@
           <th>Street</th>
           <th>City</th>
           <th>Zipcode</th>
+          <th>Contact ID</th>
           <th>Name</th>
           <th></th>
         </tr>
@@ -37,10 +38,11 @@
             <td><%=addresses[i].street%></td>
             <td><%=addresses[i].city%></td>
             <td><%=addresses[i].zipcode%></td>
+            <td><%=addresses[i].contact_id%></td>
             <td><%=addresses[i].name%></td>
             <td>
               <a href="/addresses/edit/<%=addresses[i].id%>"><i class="material-icons">mode_edit</i></a>
-              <a href="/addresses/delete/<%=addresses[i].id%>"><i class="material-icons">delete_forever</i></a>
+              <a href="/contacts/address/delete/<%=addresses[i].id%>"><i class="material-icons">delete_forever</i></a>
           </td>
           </tr>
         <%}}%>
@@ -52,6 +54,7 @@
             <img src="/img/add.svg" />
             <h1 class="user__title">ADD NEW ADDRESS</h1>
             <br>
+            <p style="color:red;"><%=alert%></p>
 
         </header>
 
