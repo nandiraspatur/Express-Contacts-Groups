@@ -10,7 +10,7 @@
     <table>
       <thead>
         <tr>
-          <th colspan="5"><h3>CONTACTS</h3></th>
+          <th colspan="6"><h3>CONTACTS</h3></th>
           <th>
             <a href="/"><i class="material-icons">home</i></a>
             <a href="#form"><i class="material-icons">add_box</i></a>
@@ -22,13 +22,14 @@
           <th>Company</th>
           <th>Telepon</th>
           <th>Email</th>
+          <th>Groups</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <%if(contacts.length == 0){%>
           <tr>
-            <td colspan="6">Empty</td>
+            <td colspan="7">Empty</td>
           </tr>
         <%}else{%>
         <%for(var i=0; i<contacts.length; i++){%>
@@ -38,6 +39,7 @@
             <td><%=contacts[i].company%></td>
             <td><%=contacts[i].telp_number%></td>
             <td><%=contacts[i].email%></td>
+            <td><%=contacts[i].groups.join(', ')%></td>
             <td>
               <a href="/contacts/edit/<%=contacts[i].id%>"><i class="material-icons">mode_edit</i></a>
               <a href="/contacts/address/<%=contacts[i].id%>"><i class="material-icons">navigation</i></a>
@@ -73,8 +75,8 @@
             </div>
 
             <div class="form__group">
-              <select name="contact_id" class="select">
-                <option value="">-select contact-</option>
+              <select name="groups_id" class="select">
+                <option value="">-select groups-</option>
                 <%for(var i=0; i<groups.length; i++){%>
                   <option value="<%=groups[i].id%>"><%=groups[i].name_of_group%></option>
                 <%}%>

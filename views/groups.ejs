@@ -10,7 +10,7 @@
     <table>
       <thead>
         <tr>
-          <th colspan="2"><h3>GROUPS</h3></th>
+          <th colspan="3"><h3>GROUPS</h3></th>
           <th>
             <a href="/"><i class="material-icons">home</i></a>
             <a href="#form"><i class="material-icons">add_box</i></a>
@@ -19,19 +19,21 @@
         <tr>
           <th>ID</th>
           <th>Name Group</th>
+          <th>Members</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <%if(groups.length == 0){%>
           <tr>
-            <td colspan="3">Empty</td>
+            <td colspan="4">Empty</td>
           </tr>
         <%}else{%>
         <%for(var i=0; i<groups.length; i++){%>
           <tr>
             <td><%=groups[i].id%></td>
             <td><%=groups[i].name_of_group%></td>
+            <td><%=groups[i].members.join(', ')%></td>
             <td>
               <a href="/groups/edit/<%=groups[i].id%>"><i class="material-icons">mode_edit</i></a>
               <a href="/groups/assign-contacts/<%=groups[i].id%>"><i class="material-icons">group</i></a>

@@ -10,10 +10,10 @@
     <div class="user" id="form">
         <header class="user__header">
             <img src="/img/add.svg" alt="" />
-            <h1 class="user__title">ASSIGN CONTACT TO <%=groups[0].name_of_group%></h1>
+            <h1 class="user__title">ASSIGN CONTACT TO - <%=groups.name_of_group%></h1>
         </header>
 
-        <form class="form" action="/groups" method="post">
+        <form class="form" action="<%=groups.id%>" method="post">
             <div class="form__group">
               <select name="contact_id" class="select">
                 <option value="">-select contact-</option>

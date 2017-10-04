@@ -10,7 +10,7 @@
     <table>
       <thead>
         <tr>
-          <th colspan="6"><h3>ADDRESSES</h3></th>
+          <th colspan="6"><h3>ADDRESSES - <%=addresses[0].name%></h3></th>
           <th>
             <a href="/"><i class="material-icons">home</i></a>
             <a href="#form"><i class="material-icons">add_box</i></a>
@@ -29,7 +29,7 @@
       <tbody>
         <%if(addresses.length == 0){%>
           <tr>
-            <td colspan="6">Empty</td>
+            <td colspan="7">Empty</td>
           </tr>
         <%}else{%>
         <%for(var i=0; i<addresses.length; i++){%>
@@ -58,7 +58,7 @@
 
         </header>
 
-        <form class="form" action="/contacts/address/<%=addresses[0].contact_id%>" method="post">
+        <form class="form" action="/contacts/address/<%=params%>" method="post">
             <div class="form__group">
                 <input type="text" placeholder="Street" name="street" class="form__input" />
             </div>

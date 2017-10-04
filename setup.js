@@ -61,5 +61,23 @@ function alterAddresses() {
   })
 }
 
+function alterAddresses() {
+  db.run('ALTER TABLE Contacts ADD group_id INTEGER REFERENCES Groups(id)', (err) => {
+    if(err){
+      console.log(err);
+    }
+  })
+}
+
+function conjunction(){
+  db.run('CREATE TABLE IF NOT EXISTS ContactsGroups(id INTEGER PRIMARY KEY AUTOINCREMENT, contact_id INTEGER REFERENCES Contacts(id), group_id INTEGER REFERENCES Groups(id))', function(err){
+    if(err){
+      console.log(err);
+    }else{
+      console.log('table created');
+    }
+  })
+}
+
 
 alterAddresses()

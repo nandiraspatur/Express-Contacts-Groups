@@ -15,6 +15,15 @@
 
         <form class="form" action="<%=data.id%>" method="post">
             <div class="form__group">
+              <select name="groups_id" class="select">
+                <option value="">-select groups-</option>
+                <%for(var i=0; i<groups.length; i++){%>
+                  <option value="<%=groups[i].id%>"><%=data[i].name_of_group%></option>
+                <%}%>
+              </select>
+            </div>
+
+            <div class="form__group">
                 <input type="text" placeholder="Name Group" name="name_of_group" class="form__input" value="<%=data.name_of_group%>"/>
             </div>
 

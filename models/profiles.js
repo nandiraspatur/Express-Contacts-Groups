@@ -9,30 +9,37 @@ class Profiles {
     this.contact_id = data.contact_id;
   }
 
-  static findAll(cb){
-    db.all('SELECT Profiles.*,Contacts.name FROM Profiles JOIN Contacts ON Profiles.contact_id = Contacts.id', (err, rows) =>{
-      let result = []
-      rows.forEach((data) => {
-        let profiles = new Profiles(data)
-        result.push(profiles);
+  static findAll(){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.all('SELECT Profiles.*,Contacts.name FROM Profiles JOIN Contacts ON Profiles.contact_id = Contacts.id', (err, rows) =>{
+        let result = []
+        rows.forEach((data) => {
+          let profiles = new Profiles(data)
+          result.push(profiles);
+        })
+        resolve(result)
       })
-      db.all('SELECT * FROM Contacts', (err, rows2) =>{
-        cb(result, rows2)
-      })
-    })
+    });
+    return promiseObj
   }
 
-  static insertProfile(username, password, contact_id, cb){
-     db.run(`INSERT INTO Profiles (username, password, contact_id) VALUES ('${username}', '${password}', '${contact_id}')`, (err) => {
-       cb(err)
-     })
+  static insertProfile(username, password, contact_id){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.run(`INSERT INTO Profiles (username, password, contact_id) VALUES ('${username}', '${password}', '${contact_id}')`, (err) => {
+        resolve(err)
+      })
+    });
+    return promiseObj
   }
 
-  static editProfilesGet(paramsId, cb){
-    db.get(`SELECT * FROM Profiles WHERE id = '${paramsId}'`, function(err, rows){
-      let profiles = new Profiles(rows)
-      cb(profiles)
-    })
+  static editProfilesGet(paramsId){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.get(`SELECT * FROM Profiles WHERE id = '${paramsId}'`, (err, rows) => {
+        let profiles = new Profiles(rows)
+        resolve(profiles)
+      })
+    });
+    return promiseObj
   }
 
   static editProfilesPost(inputParams, username, password){

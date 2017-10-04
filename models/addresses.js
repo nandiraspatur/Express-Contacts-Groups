@@ -10,31 +10,32 @@ class Addresses{
     this.contact_id = data.contact_id;
   }
 
-  static findAll(cb){
-    db.all('SELECT * FROM Addresses', (err, rows) =>{
-      let result = []
-      rows.forEach((data) => {
-        let addresses = new Addresses(data)
-        result.push(addresses);
-      })
-      db.all('SELECT * FROM Contacts', (err, rows2) => {
-        cb(result, rows2);
+  static findAll(){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.all('SELECT * FROM Addresses', (err, rows) =>{
+        let result = []
+          rows.forEach((data) => {
+            let addresses = new Addresses(data)
+            result.push(addresses);
+          })
+        resolve(result)
       })
     })
+    return promiseObj;
   }
 
   static insertAddresses(street, city, zipcode, contact_id){
     db.run(`INSERT INTO Addresses (street, city, zipcode, contact_id) VALUES ('${street}', '${city}', '${zipcode}', '${contact_id}')`)
   }
 
-  static editAddressesGet(paramsId, cb){
-    db.get(`SELECT * FROM Addresses WHERE id = '${paramsId}'`, function(err, rows){
-      console.log(rows);
-      let addresses = new Addresses(rows)
-      db.all(`SELECT * FROM Contacts`, (err, rows2) => {
-        cb(addresses, rows2)
+  static editAddressesGet(paramsId){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.get(`SELECT * FROM Addresses WHERE id = '${paramsId}'`, function(err, rows){
+        let addresses = new Addresses(rows)
+        resolve(addresses)
       })
     })
+    return promiseObj
   }
 
   static editAddressesPost(paramsId, street, city, zipcode, contact_id){

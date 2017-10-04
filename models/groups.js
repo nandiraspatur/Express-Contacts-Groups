@@ -7,26 +7,32 @@ class Groups{
     this.name_of_group = data.name_of_group;
   }
 
-  static findAll(cb){
-    db.all('SELECT * FROM Groups', (err, rows) =>{
-      let result = []
-      rows.forEach((data) => {
-        let groups = new Groups(data)
-        result.push(groups);
+  static findAll(){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.all('SELECT * FROM Groups', (err, rows) =>{
+        let result = []
+        rows.forEach((data) => {
+          let groups = new Groups(data)
+          result.push(groups);
+        })
+        resolve(result);
       })
-      cb(result);
     })
+    return promiseObj
   }
 
   static insertGroups(name_of_group){
     db.run(`INSERT INTO Groups (name_of_group) VALUES ('${name_of_group}')`)
   }
 
-  static editGroupsGet(paramsId, cb){
-    db.get(`SELECT * FROM Groups WHERE id = '${paramsId}'`, function(err, rows){
-      let groups = new Groups(rows)
-      cb(groups)
-    })
+  static editGroupsGet(paramsId){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.get(`SELECT * FROM Groups WHERE id = '${paramsId}'`, function(err, rows){
+        let groups = new Groups(rows)
+        resolve(groups)
+      })
+    });
+    return promiseObj
   }
 
   static editGroupsPost(paramsID, name_of_group){

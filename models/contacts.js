@@ -10,28 +10,39 @@ class Contacts {
     this.email = data.email
   }
 
-  static findAll(cb){
-    db.all('SELECT * FROM Contacts', (err, rowsContacts) =>{
-      let contactsObj = []
-      rowsContacts.forEach((data) => {
-        let contacts = new Contacts(data)
-        contactsObj.push(contacts);
-      })
-      db.all('SELECT * FROM Groups', (err, rowsGroups) =>{
-        cb(contactsObj, rowsGroups)
+  static findAll(){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.all('SELECT * FROM Contacts', (err, rows) =>{
+        let result = []
+        rows.forEach((data) => {
+          let contacts = new Contacts(data)
+          result.push(contacts);
+        })
+        resolve(result)
       })
     })
+    return promiseObj
   }
 
-  static insertContact(name, company, telp_number, email){
-    db.run(`INSERT INTO Contacts (name, company, telp_number, email) VALUES ('${name}', '${company}', '${telp_number}', '${email}')`)
-  }
-
-  static editContactsGet(input, cb){
-    db.get(`SELECT * FROM Contacts WHERE id = '${input}'`, function(err, rows){
-      let contacts = new Contacts(rows)
-      cb(contacts);
+  static insertContact(name, company, telp_number, email, groupId){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.run(`INSERT INTO Contacts (name, company, telp_number, email, group_id) VALUES ('${name}', '${company}', '${telp_number}', '${email}', '${groupId}')`, function(err) {
+        if(!err){
+          resolve(this.lastID)
+        }
+      })
     })
+    return promiseObj
+  }
+
+  static editContactsGet(paramsId){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.get(`SELECT * FROM Contacts WHERE id = '${paramsId}'`, function(err, rows){
+        let contacts = new Contacts(rows)
+        resolve(contacts);
+      })
+    })
+    return promiseObj
   }
 
   static editContactsPost(inputParams, name, company, telp_number, email){
@@ -43,10 +54,13 @@ class Contacts {
     db.run(`DELETE FROM Contacts WHERE id='${inputParams}'`)
   }
 
-  static findAddresses(inputParams, cb){
-    db.all(`SELECT Addresses.*, Contacts.name FROM Addresses JOIN Contacts ON Addresses.contact_id = Contacts.id WHERE contact_id = '${inputParams}'`, (err, rows) =>{
-      cb(rows);
+  static findAddresses(paramsId){
+    let promiseObj = new Promise((resolve, reject) => {
+      db.all(`SELECT * FROM Addresses WHERE contact_id = '${paramsId}'`, (err, rows) =>{
+        resolve(rows)
+      })
     })
+    return promiseObj
   }
 
   static addAddressByContact(inputParams, street, city, zipcode){
