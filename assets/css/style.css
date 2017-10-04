@@ -206,14 +206,26 @@ th .material-icons:hover {
 }
 
 .back {
-    margin: 10px auto;
-    width: 100%;
-    display: block;
-    text-align: center;
-    color: #fff;
-    text-decoration: none;
+  margin: 10px auto;
+  width: 100%;
+  display: block;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
 }
 
 .back:hover {
-    color: #999;
+  color: #999;
+}
+
+.select {
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin: auto;
+    height: 50px;
+    background: #f3f3f3;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    color: #436d89;
 }
